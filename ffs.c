@@ -65,7 +65,7 @@ struct ffs *ffs_alloc(char *path, int flags)
 	if (dec == NULL)
 		goto failed;
 	ffs->cc = avcodec_alloc_context3(dec);
-	ffs->cc->thread_count = 0;
+	ffs->cc->thread_count = 4;
 	ffs->cc->thread_type = FF_THREAD_FRAME;
 	if (ffs->cc == NULL)
 		goto failed;
