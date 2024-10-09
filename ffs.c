@@ -65,8 +65,18 @@ struct ffs *ffs_alloc(char *path, int flags)
 	if (dec == NULL)
 		goto failed;
 	ffs->cc = avcodec_alloc_context3(dec);
-	ffs->cc->thread_count = 4;
-	ffs->cc->thread_type = FF_THREAD_SLICE;
+	if (dec->capabilities & AV_CODEC_CAP_FRAME_THREADS) {
+    	ffs->cc->thread_type = FF_THREAD_FRAME;
+    	ffs->cc->thread_count = 0;
+    	printf("Multithreading: FF_THREAD_FRAME\n");
+	} else if (dec->capabilities & AV_CODEC_CAP_SLICE_THREADS) {
+    	ffs->cc->thread_type = FF_THREAD_SLICE;
+    	ffs->cc->thread_count = 0;
+    	printf("Multithreading: FF_THREAD_SLICE\n");
+	} else {
+    	printf("Singlethreading\n");
+    	ffs->cc->thread_count = 1;
+	}
 	if (ffs->cc == NULL)
 		goto failed;
 	avcodec_parameters_to_context(ffs->cc, ffs->fc->streams[ffs->si]->codecpar);
