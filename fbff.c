@@ -467,7 +467,7 @@ static void read_args(int argc, char *argv[])
 		if (c[1] == 't')
 			sub_path = c[2] ? c + 2 : argv[++i];
 		if (c[1] == 'h')
-			printf(usage);
+			printf("%s", usage);
 		if (c[1] == 'x')
 			posx = c[2] ? atoi(c + 2) : atoi(argv[++i]);
 		if (c[1] == 'y')
